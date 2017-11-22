@@ -26,61 +26,29 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKList;
 
+import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private String[] scope = new String[]{VKScope.VIDEO, VKScope.WALL, VKScope.FRIENDS};
 
-
-    public Context context;
+    Context context;
     ModelVideo modVid;
     ModelVideo[] myDataset;
-
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
-    private ProgressBar progressBar;
+    private String[] scope = new String[]{VKScope.VIDEO, VKScope.WALL, VKScope.FRIENDS};
+   
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         VKSdk.login(this, scope);
-
-//        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-//        progressBar.setVisibility(ProgressBar.VISIBLE);
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-
-        // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
-
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        mAdapter = new MyRecyclerAdapter(context, myDataset);
-        mRecyclerView.setAdapter(mAdapter);
-
-//        progressBar.setVisibility(ProgressBar.INVISIBLE);
-
-        mRecyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(MainActivity.this, new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-
-                        Intent intent = new Intent(MainActivity.this, FullActivity.class);
-
-
-
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    }
-                })
-        );
-
+        context = getApplicationContext();
+//
     }
 
 
@@ -93,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //
                 final VKRequest request = VKApi.video().get(VKParameters
-                        .from(VKApiConst.FIELDS, "title,duration,photo_130,player"));
+                        .from(VKApiConst.FIELDS, "title,duration,photo_320,player"));
 
                 request.executeWithListener(new VKRequest.VKRequestListener() {
 
@@ -104,13 +72,11 @@ public class MainActivity extends AppCompatActivity {
 
                         VKList<com.vk.sdk.api.model.VKApiVideo> list = (VKList) response.parsedModel;
 
-
-
-                        myDataset = new ModelVideo[list.size()];
-                        for(int i = 0; i <= list.size() - 1; i++) {
+                                            myDataset = new ModelVideo[list.size()];
+                        for (int i = 0; i <= list.size() - 1; i++) {
 
                             modVid = new ModelVideo(i,
-                                    list.get(i).photo_130,
+                                    list.get(i).photo_320,
                                     list.get(i).title,
                                     list.get(i).duration,
                                     list.get(i).player);
@@ -119,6 +85,34 @@ public class MainActivity extends AppCompatActivity {
                         }
 
 
+                        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+
+                        // use a linear layout manager
+                        mLayoutManager = new LinearLayoutManager(context);
+
+                        mRecyclerView.setLayoutManager(mLayoutManager);
+
+                        mAdapter = new MyRecyclerAdapter(context, myDataset);
+                        mRecyclerView.setAdapter(mAdapter);
+
+
+
+                        mRecyclerView.addOnItemTouchListener(
+                                new RecyclerItemClickListener(context, new RecyclerItemClickListener.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(View view, int position) {
+
+                                        Intent intent = new Intent(MainActivity.this, FullActivity.class);
+
+                                        String stringUrlVideo = null;
+                                        stringUrlVideo = myDataset[position].getUrlVideo();
+
+//                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        intent.putExtra("title", stringUrlVideo);
+                                        startActivity(intent);
+                                    }
+                                })
+                        );
                     }
 
                     @Override
@@ -131,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
                         //I don't really believe in progress
                     }
                 });
-
             }
 
             @Override
