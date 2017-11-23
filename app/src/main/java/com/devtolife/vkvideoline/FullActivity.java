@@ -6,12 +6,11 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.VideoView;
+
 
 
 public class FullActivity extends AppCompatActivity {
 
-    VideoView videoPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +22,7 @@ public class FullActivity extends AppCompatActivity {
 
         mWebView.getSettings().setJavaScriptEnabled(true);
 
-        mWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
+//        mWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
         mWebView.setWebViewClient(new WebViewClient());
         mWebView.setWebChromeClient(new WebChromeClient());
 
