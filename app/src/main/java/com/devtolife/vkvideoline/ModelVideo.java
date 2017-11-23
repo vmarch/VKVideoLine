@@ -4,27 +4,25 @@ import static java.lang.Long.valueOf;
 
 public class ModelVideo {
 
-    private int id;
+    private int idVideo;
+    private int ownerIdVideo;
     private String urlImage;
     private String name;
     private int time;
     private String urlVideo;
     private String stringTimeVideo;
+    public String urlOfVideo;
 
-    public int getId() {
-        return id;
+    public int getIdVideo() {
+        return idVideo;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getOwnerIdVideo() {
+        return ownerIdVideo;
     }
 
     public String getUrlImage() {
         return urlImage;
-    }
-
-    public void setUrlImage(String urlImage) {
-        this.urlImage = urlImage;
     }
 
     public String getName() {
@@ -43,16 +41,17 @@ public class ModelVideo {
         return urlVideo;
     }
 
-    public void setUrlVideo(String urlVideo) {
+    public ModelVideo(int idVideo, int ownerId, String image, String name, int intTime, String urlVideo) {
+        this.idVideo = idVideo;
+        this.ownerIdVideo = ownerId;
+        this.urlImage = image;
+        this.name = name;
+        this.time = intTime;
         this.urlVideo = urlVideo;
+        getTime();
     }
 
-
-
-
-
-    public ModelVideo(int id, String image, String name, int intTime, String urlVideo) {
-        this.id = id;
+    public ModelVideo(String image, String name, int intTime, String urlVideo) {
         this.urlImage = image;
         this.name = name;
         this.time = intTime;

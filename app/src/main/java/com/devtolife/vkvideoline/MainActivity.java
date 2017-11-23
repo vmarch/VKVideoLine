@@ -7,11 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 import com.vk.sdk.VKAccessToken;
@@ -40,15 +36,16 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private String[] scope = new String[]{VKScope.VIDEO, VKScope.WALL, VKScope.FRIENDS};
-   
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
+
         VKSdk.login(this, scope);
         context = getApplicationContext();
-//
     }
 
 
@@ -58,13 +55,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResult(VKAccessToken res) {
 
-
-                //
                 final VKRequest request = VKApi.video().get(VKParameters
-                        .from(VKApiConst.FIELDS, "title,duration,photo_320,player"));
+                        .from(VKApiConst.FIELDS, "id,owner_id,title,duration,photo_320,player"));
 
                 request.executeWithListener(new VKRequest.VKRequestListener() {
-
 
                     @Override
                     public void onComplete(VKResponse response) {
@@ -72,10 +66,10 @@ public class MainActivity extends AppCompatActivity {
 
                         VKList<com.vk.sdk.api.model.VKApiVideo> list = (VKList) response.parsedModel;
 
-                                            myDataset = new ModelVideo[list.size()];
+                        myDataset = new ModelVideo[list.size()];
                         for (int i = 0; i <= list.size() - 1; i++) {
 
-                            modVid = new ModelVideo(i,
+                            modVid = new ModelVideo(
                                     list.get(i).photo_320,
                                     list.get(i).title,
                                     list.get(i).duration,
@@ -84,21 +78,17 @@ public class MainActivity extends AppCompatActivity {
                             myDataset[i] = modVid;
                         }
 
-
                         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
-                        // use a linear layout manager
                         mLayoutManager = new LinearLayoutManager(context);
-
                         mRecyclerView.setLayoutManager(mLayoutManager);
 
                         mAdapter = new MyRecyclerAdapter(context, myDataset);
                         mRecyclerView.setAdapter(mAdapter);
 
-
-
                         mRecyclerView.addOnItemTouchListener(
                                 new RecyclerItemClickListener(context, new RecyclerItemClickListener.OnItemClickListener() {
+
                                     @Override
                                     public void onItemClick(View view, int position) {
 
@@ -107,8 +97,9 @@ public class MainActivity extends AppCompatActivity {
                                         String stringUrlVideo = null;
                                         stringUrlVideo = myDataset[position].getUrlVideo();
 
-//                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        intent.putExtra("title", stringUrlVideo);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                        intent.putExtra("urlOfVKPlayer", stringUrlVideo);
                                         startActivity(intent);
                                     }
                                 })
@@ -137,10 +128,5 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-    }
-
-
-    public void onProgressClick(View view) {
-        Toast.makeText(this, "Подождите, идёт загрузка!", Toast.LENGTH_LONG).show();
     }
 }

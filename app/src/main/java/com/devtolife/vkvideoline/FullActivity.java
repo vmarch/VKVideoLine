@@ -2,35 +2,37 @@ package com.devtolife.vkvideoline;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.MediaController;
+import android.webkit.WebViewClient;
 import android.widget.VideoView;
 
 
 public class FullActivity extends AppCompatActivity {
 
+    VideoView videoPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full);
+        String vidString = getIntent().getStringExtra("urlOfVKPlayer");
 
-        String vidString = getIntent().getStringExtra("title");
+        WebView mWebView = (WebView) findViewById(R.id.video_play);
 
-        WebView browser=(WebView)findViewById(R.id.video_player);
+        mWebView.getSettings().setJavaScriptEnabled(true);
 
-        browser.loadUrl(vidString);
+        mWebView.getSettings().setPluginState(WebSettings.PluginState.ON);
+        mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setWebChromeClient(new WebChromeClient());
 
-//        https://m.vk.com/video_ext.php?oid=-45441631&id=456240285&hash=678781a745502b7e&__ref=vk.api&api_hash=1511366326cadf2f988c46315c21_GQ2TKOJSGA3TGNQ
+//        mWebView.loadData(vidString, "text/html", "UTF-8");
 
-
-        System.out.println(vidString.toString());
-
-
-
-    }
+        mWebView.loadUrl(vidString);
 
     }
+}
 
 
 
