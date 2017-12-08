@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/vk_share_gray_line"
     android:orientation="vertical"
     tools:context="com.devtolife.vkvideoline.MainActivity">
 
-
-    <ListView
-        android:id="@+id/listView"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent"
+        android:background="@color/vk_light_color"
+        android:scrollbars="vertical" />
 
 </LinearLayout>
